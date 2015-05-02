@@ -1,14 +1,11 @@
 
 (ns leiningen.eastwood-junit
-  (:require [clojure.data.xml :refer [emit-str]]))
+  (:require [leiningen.core.eval :refer [eval-in-project]]))
 
-(def main
-  (delay
-    (do
-      (require 'owsy.eastwood-junit.core)
-      (resolve (symbol "owsy.eastwood-junit.core/run-from-cmdline")))))
-
-(defn eastwood-junit [project & [opts]]
-  (let [opts (read-string (or opts "{}"))]
-    (@main opts)))
+(defn eastwood-junit
+  [project & [opts]]
+  (eval-in-project
+    (update-in project [:dependencies] conj ['owsy/eastwood-junit "0.2.0"])
+    `(owsy.eastwood-junit.core/run-from-cmdline '~opts)
+    '(require 'owsy.eastwood-junit.core)))
 
