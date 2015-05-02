@@ -7,5 +7,5 @@
   (println
     (emit-str
       (element-for
-        (read-string opts)))))
+        (read-string (or opts "{}"))))))
 

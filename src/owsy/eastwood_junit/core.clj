@@ -17,11 +17,11 @@
 (defn- xml-for
   [opts]
   (let [warnings (:warnings (lint opts))
+        suite [:testsuite {:tests (count warnings)}]
         cases (map to-testcase warnings)]
-    (apply
-      conj
-      [:testsuite {:tests (count warnings)}]
-      (vec cases))))
+    (if (not (empty cases))
+      (apply conj suite (vec cases))
+      suite)))
 
 ;; Public
 ;; ------

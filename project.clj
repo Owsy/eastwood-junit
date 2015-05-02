@@ -1,5 +1,5 @@
 
-(defproject owsy/eastwood-junit "0.1.1"
+(defproject owsy/eastwood-junit "0.1.2"
   :description "Run Eastwood with JUnit output"
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/data.xml "0.0.8"]
