@@ -1,7 +1,7 @@
 
 (ns owsy.eastwood-junit.core
-  (:require [clojure.data.xml :refer [sexp-as-element]]
-            [eastwood.lint :refer [lint]]))
+  (:require [clojure.data.xml :refer [emit-str sexp-as-element]]
+            [eastwood.lint :as eastwood]))
 
 (defn- to-testcase
   [{:keys [column linter line msg] :as warning}]
@@ -16,18 +16,24 @@
 
 (defn- xml-for
   [opts]
-  (let [warnings (:warnings (lint opts))
+  (let [warnings (:warnings (eastwood/lint opts))
         suite [:testsuite {:tests (count warnings)}]
         cases (map to-testcase warnings)]
-    (if (not (empty cases))
-      (apply conj suite (vec cases))
-      suite)))
+    (if (empty? cases)
+      suite
+      (apply conj suite (vec cases)))))
 
 ;; Public
 ;; ------
 
-(defn element-for
+(defn lint
   [opts]
   (sexp-as-element
     (xml-for opts)))
+
+(defn run-from-cmdline
+  [opts]
+  (println
+    (emit-str
+      (lint opts))))
 

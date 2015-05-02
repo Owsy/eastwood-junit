@@ -1,11 +1,14 @@
 
 (ns leiningen.eastwood-junit
-  (:require [clojure.data.xml :refer [emit-str]]
-            [owsy.eastwood-junit.core :refer [element-for]]))
+  (:require [clojure.data.xml :refer [emit-str]]))
+
+(def main
+  (delay
+    (do
+      (require 'owsy.eastwood-junit.core)
+      (resolve (symbol "owsy.eastwood-junit.core/run-from-cmdline")))))
 
 (defn eastwood-junit [project & [opts]]
-  (println
-    (emit-str
-      (element-for
-        (read-string (or opts "{}"))))))
+  (let [opts (read-string (or opts "{}"))]
+    (@main opts)))
 
