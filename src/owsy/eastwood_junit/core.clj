@@ -28,7 +28,7 @@
 ;; Public
 ;; ------
 
-(defn- lint
+(defn lint
   [opts]
   (let [warnings (:warnings (eastwood/lint opts))
         packages (group-by :namespace-sym warnings)]
