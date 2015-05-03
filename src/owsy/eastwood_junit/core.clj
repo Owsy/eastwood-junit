@@ -14,14 +14,23 @@
      [:failure {:type linter
                 :message msg}]]))
 
-(defn- xml-for
-  [opts]
-  (let [warnings (:warnings (eastwood/lint opts))
-        suite [:testsuite {:tests (count warnings)}]
+(defn- to-testsuite
+  [nss warnings]
+  (let [suite [:testsuite {:package nss}]
         cases (map to-testcase warnings)]
     (if (empty? cases)
       suite
       (apply conj suite (vec cases)))))
+
+(defn- xml-for
+  [opts]
+  (let [suite [:testsuites]
+        warnings (:warnings (eastwood/lint opts))
+        packages (group-by :namespace-sym warnings)
+        suites (map to-testsuite (keys packages) (vals packages))]
+    (if (empty? suites)
+      suite
+      (apply conj suite (vec suites)))))
 
 ;; Public
 ;; ------
