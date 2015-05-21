@@ -41,5 +41,6 @@
   (emit
     (sexp-as-element
       (lint opts))
-    *out*))
+    *out*)
+  nil)
 
